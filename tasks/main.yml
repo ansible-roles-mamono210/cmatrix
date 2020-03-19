@@ -1,0 +1,45 @@
+---
+- name: Delete working directory
+  file:
+    path: '{{ work_dir }}'
+    state: absent
+
+- name: Make working directory
+  file:
+    path: '{{ work_dir }}'
+    state: directory
+    mode: 0755
+
+- name: Install required packages
+  yum:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - '@Development Tools'
+    - libyaml-devel
+    - ncurses-devel
+
+- name: Download cmatrix install file
+  git:
+    repo: '{{ cmatrix_git_repo }}'
+    dest: '{{ work_dir }}'
+    force: yes
+
+- name: Build cmatrix 1 / autoreconf -i
+  command: autoreconf -i
+  args:
+    chdir: '{{ work_dir }}'
+
+- name: Build cmatrix 2 / .configure
+  command: ./configure
+  args:
+    chdir: '{{ work_dir }}'
+
+- name: Build cmatrix 3 / make
+  make:
+    chdir: '{{ work_dir }}'
+
+- name: Build cmatrix 4 / make install
+  make:
+    chdir: '{{ work_dir }}'
+    target: install
