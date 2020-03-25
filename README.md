@@ -1,9 +1,10 @@
-[![](https://github.com/ansible-roles-matsumura/cmatrix/workflows/Build/badge.svg)](https://github.com/ansible-roles-matsumura/cmatrix/actions)
+[![](https://github.com/ansible-roles-matsumura/cmatrix/workflows/Build/badge.svg)](https://github.com/ansible-roles-matsumura/cmatrix/actions?query=workflow%3ABuild)
+[![](https://github.com/ansible-roles-matsumura/cmatrix/workflows/Lint/badge.svg)](https://github.com/ansible-roles-matsumura/cmatrix/actions?query=workflow%3ALint)
 
-Role Name
+Role Description
 =========
 
-Installs Matrix for CentOS7.
+Installs [CMatrix](https://github.com/abishekvashok/cmatrix) for CentOS7.
 
 Requirements
 ------------
@@ -31,7 +32,7 @@ Example Playbook
 - hosts: all
   become: true
   roles:
-    - cmatrix 
+    - cmatrix
 ```
 
 License
