@@ -1,45 +1,80 @@
 ---
+- name: Check whether CMatrix is installed
+  shell: cmatrix -V
+  register: CMATRIX_INSTALLED
+  changed_when: false
+  ignore_errors: true
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+
 - name: Delete working directory
   file:
     path: '{{ work_dir }}'
     state: absent
+  when: CMATRIX_INSTALLED is failed
 
 - name: Make working directory
   file:
     path: '{{ work_dir }}'
     state: directory
     mode: 0755
+  when: CMATRIX_INSTALLED is failed
 
-- name: Install required packages
+- name: Install required packages 1
+  package:
+    name: '@Development Tools'
+    state: present
+  when: CMATRIX_INSTALLED is failed
+
+- name: Install required packeges 2 (CentOS8)
+  dnf:
+    name: '{{ item }}'
+    state: present
+    enablerepo: PowerTools
+  loop:
+    - libyaml-devel
+    - ncurses-devel
+  when:
+    - CMATRIX_INSTALLED is failed
+    - ansible_distribution_major_version == "8"
+
+- name: Install required packeges 2 (CentOS7)
   yum:
     name: '{{ item }}'
     state: present
   loop:
-    - '@Development Tools'
     - libyaml-devel
     - ncurses-devel
+  when:
+    - CMATRIX_INSTALLED is failed
+    - ansible_distribution_major_version == "7"
 
 - name: Download cmatrix install file
   git:
     repo: '{{ cmatrix_git_repo }}'
     dest: '{{ work_dir }}'
     force: yes
+  when: CMATRIX_INSTALLED is failed
 
 - name: Build cmatrix 1 / autoreconf -i
   command: autoreconf -i
   args:
     chdir: '{{ work_dir }}'
+  when: CMATRIX_INSTALLED is failed
 
 - name: Build cmatrix 2 / .configure
   command: ./configure
   args:
     chdir: '{{ work_dir }}'
+  when: CMATRIX_INSTALLED is failed
 
 - name: Build cmatrix 3 / make
   make:
     chdir: '{{ work_dir }}'
+  when: CMATRIX_INSTALLED is failed
 
 - name: Build cmatrix 4 / make install
   make:
     chdir: '{{ work_dir }}'
     target: install
+  when: CMATRIX_INSTALLED is failed
