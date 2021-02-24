@@ -20,6 +20,24 @@
     mode: 0755
   when: CMATRIX_INSTALLED is failed
 
+- name: Install required packages for when the distribution version is 8
+  dnf:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - dnf-plugins-core
+    - epel-release
+  when:
+    - CMATRIX_INSTALLED is failed
+    - ansible_distribution_major_version == "8"
+
+- name: Enable PowerTools repository when the distribution version is 8
+  shell: dnf config-manager --set-enabled powertools
+  changed_when: false
+  when:
+    - CMATRIX_INSTALLED is failed
+    - ansible_distribution_major_version == "8"
+
 - name: Install required packages 1
   package:
     name: '@Development Tools'
