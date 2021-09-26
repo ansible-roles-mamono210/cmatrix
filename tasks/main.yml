@@ -1,7 +1,7 @@
 ---
 - name: Check whether CMatrix is installed
   ansible.builtin.command: cmatrix -V
-  register: CMATRIX_INSTALLED
+  register: cmatrix_installed
   changed_when: false
   ignore_errors: true
   environment:
@@ -11,14 +11,14 @@
   ansible.builtin.file:
     path: '{{ work_dir }}'
     state: absent
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Make working directory
   ansible.builtin.file:
     path: '{{ work_dir }}'
     state: directory
     mode: 0755
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Install required packages for when the distribution version is 8
   ansible.builtin.dnf:
@@ -28,21 +28,21 @@
     - dnf-plugins-core
     - epel-release
   when:
-    - CMATRIX_INSTALLED is failed
+    - cmatrix_installed is failed
     - ansible_distribution_major_version == "8"
 
 - name: Enable PowerTools repository when the distribution version is 8
   ansible.builtin.command: dnf config-manager --set-enabled powertools
   changed_when: false
   when:
-    - CMATRIX_INSTALLED is failed
+    - cmatrix_installed is failed
     - ansible_distribution_major_version == "8"
 
 - name: Install required packages 1
   ansible.builtin.package:
     name: '@Development Tools'
     state: present
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Install required packeges 2 (CentOS8)
   ansible.builtin.dnf:
@@ -53,7 +53,7 @@
     - libyaml-devel
     - ncurses-devel
   when:
-    - CMATRIX_INSTALLED is failed
+    - cmatrix_installed is failed
     - ansible_distribution_major_version == "8"
 
 - name: Install required packeges 2 (CentOS7)
@@ -64,7 +64,7 @@
     - libyaml-devel
     - ncurses-devel
   when:
-    - CMATRIX_INSTALLED is failed
+    - cmatrix_installed is failed
     - ansible_distribution_major_version == "7"
 
 - name: Download cmatrix install file
@@ -72,27 +72,27 @@
     repo: '{{ cmatrix_git_repo }}'
     dest: '{{ work_dir }}'
     version: '{{ cmatrix_version }}'
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Build cmatrix 1 / autoreconf -i
   ansible.builtin.command: autoreconf -i
   args:
     chdir: '{{ work_dir }}'
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Build cmatrix 2 / .configure
   ansible.builtin.command: ./configure
   args:
     chdir: '{{ work_dir }}'
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Build cmatrix 3 / make
   community.general.make:
     chdir: '{{ work_dir }}'
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
 
 - name: Build cmatrix 4 / make install
   community.general.make:
     chdir: '{{ work_dir }}'
     target: install
-  when: CMATRIX_INSTALLED is failed
+  when: cmatrix_installed is failed
