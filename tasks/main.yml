@@ -71,7 +71,7 @@
   ansible.builtin.git:
     repo: '{{ cmatrix_git_repo }}'
     dest: '{{ work_dir }}'
-    force: yes
+    version: '{{ cmatrix_version }}'
   when: CMATRIX_INSTALLED is failed
 
 - name: Build cmatrix 1 / autoreconf -i
