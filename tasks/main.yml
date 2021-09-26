@@ -1,6 +1,6 @@
 ---
 - name: Check whether CMatrix is installed
-  ansible.builtin.shell: cmatrix -V
+  ansible.builtin.command: cmatrix -V
   register: CMATRIX_INSTALLED
   changed_when: false
   ignore_errors: true
@@ -32,7 +32,7 @@
     - ansible_distribution_major_version == "8"
 
 - name: Enable PowerTools repository when the distribution version is 8
-  ansible.builtin.shell: dnf config-manager --set-enabled powertools
+  ansible.builtin.command: dnf config-manager --set-enabled powertools
   changed_when: false
   when:
     - CMATRIX_INSTALLED is failed

@@ -1,5 +1,4 @@
 ---
 parseable: true
 skip_list:
-  - command-instead-of-shell
   - git-latest
