@@ -3,7 +3,7 @@
 Role Description
 =========
 
-Installs [CMatrix](https://github.com/abishekvashok/cmatrix) for CentOS7/CentOS8.
+Installs [CMatrix](https://github.com/abishekvashok/cmatrix) for CentOS7/Stream8.
 
 Requirements
 ------------
