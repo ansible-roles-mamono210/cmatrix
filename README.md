@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/ansible-roles-mamono210/cmatrix/tree/main.svg?style=svg)](https://circleci.com/gh/ansible-roles-mamono210/cmatrix/tree/main)
 [![](https://github.com/ansible-roles-matsumura/cmatrix/workflows/build/badge.svg)](https://github.com/ansible-roles-matsumura/cmatrix/actions?query=workflow%3Abuild)
 
 Role Description
