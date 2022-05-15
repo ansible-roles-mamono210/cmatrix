@@ -4,6 +4,9 @@ yaml-files:
   - '*.yml'
   - '.yamllint'
 
+ignore: |
+  README.md
+
 rules:
   braces: enable
   brackets: enable
