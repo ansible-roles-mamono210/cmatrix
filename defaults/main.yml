@@ -1,4 +1,0 @@
----
-cmatrix_git_repo: https://github.com/abishekvashok/cmatrix.git
-cmatrix_version: 'master'
-work_dir: /tmp/cmatrix_install_ansible
